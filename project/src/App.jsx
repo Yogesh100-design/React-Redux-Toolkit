@@ -1,11 +1,27 @@
+import { fetchGifs, fetchPhotos, fetchVideos } from './api/Api'
 import './App.css'
+import StaticLandingPage from './pages/LandingPage'
 
 function App() {
+
+  function getPhotos(){
+    const data = fetchPhotos('cat');
+    console.log(data);
+  }
+  function getVideos(){
+    const data = fetchVideos('cat');
+    console.log(data);
+  }
+  function getGifs(){
+    const data = fetchGifs('cat');
+    console.log(data);
+  }
 return (
     <>
-     <div className='h-screen w-full bg-gray-950 text-white text-2xl'>
-        dfkdj
-     </div>
+    {/* <StaticLandingPage/> */}
+    <button className='w-xl bg-black text-white' onClick={getPhotos}>search</button>
+    <button className='w-xl bg-black text-white' onClick={getVideos}>search</button>
+    <button className='w-xl bg-black text-white' onClick={getGifs}>search</button>
     </>
   )
 }
