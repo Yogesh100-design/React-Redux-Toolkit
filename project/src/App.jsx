@@ -3,7 +3,9 @@ import './App.css'
 function App() {
 return (
     <>
-    <h1 className='text-3xl font-bold text-center'> jay shree ram</h1>
+     <div className='h-screen w-full bg-gray-950 text-white text-2xl'>
+        dfkdj
+     </div>
     </>
   )
 }
