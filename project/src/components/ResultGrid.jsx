@@ -9,13 +9,12 @@ const ResultGrid = () => {
   const { query, activeTab, results, loading, error } = useSelector((state) => state.search);
   
   useEffect(() => {
-    // Use a local flag to track if this effect is still active (not cleaned up)
     let isActive = true;
     
     const getData = async () => {
       if (!query || !query.trim()) {
         dispatch(setResult([]));
-        dispatch(setLoading(false)); // Ensure loading stops for empty query
+        dispatch(setLoading(false))
         return;
       }
 
@@ -45,7 +44,6 @@ const ResultGrid = () => {
           
           normalizedData = videos.map((item) => {
             const videoFiles = item.video_files || [];
-            // Create a copy before sorting to avoid mutating original
             const sortedFiles = videoFiles.length > 0 
               ? [...videoFiles].sort((a, b) => (b.height || 0) - (a.height || 0))
               : [];
@@ -80,7 +78,6 @@ const ResultGrid = () => {
           })).filter(item => item.src);
         }
 
-        // Only update state if this effect is still active (not cleaned up)
         if (isActive) {
           dispatch(setResult(normalizedData));
         }
@@ -92,7 +89,6 @@ const ResultGrid = () => {
           dispatch(setResult([]));
         }
       } finally {
-        // ALWAYS set loading to false when done, but only if still active
         if (isActive) {
           dispatch(setLoading(false));
         }
