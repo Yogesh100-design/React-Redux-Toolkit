@@ -50,7 +50,8 @@ export const fetchGifs = async (query, limit = 20) => {
         rating: 'g', // Safe for work
       },
     });
-
+    
+    console.log(response.data);
     return response.data.data; // This is the array of GIF objects
   } catch (error) {
     console.error("Giphy API Error:", error);

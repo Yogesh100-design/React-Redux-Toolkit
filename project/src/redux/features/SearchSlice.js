@@ -9,7 +9,7 @@ export const SearchSlice = createSlice({
     loading: false,
     error: "",
   },
-  reducer: {
+  reducers: {
     setQuery(state, action) {
       state.query = action.payload;
     },
@@ -41,5 +41,5 @@ export const {
   setLoading,
   setError,
   clearResult,
-} = SearchSlice.reducer;
+} = SearchSlice.actions;
 export default SearchSlice.reducer;
