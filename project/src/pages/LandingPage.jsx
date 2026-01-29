@@ -44,12 +44,15 @@ const LandingPage = () => {
       <nav className="fixed top-0 w-full z-50 border-b border-amber-100 bg-[#fdfdf7]/80 backdrop-blur-md">
         <div className="container mx-auto px-6 h-16 md:h-20 flex items-center justify-between">
           <div className="flex items-center gap-10">
-            <span className="text-slate-900 font-black text-xl md:text-2xl tracking-tighter flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <div className="w-8 h-8 md:w-10 md:h-10 bg-amber-400 rounded-xl flex items-center justify-center text-black shadow-sm">
                 <Play size={18} fill="currentColor" />
               </div>
-              VAULT
-            </span>
+              <div className="flex flex-col leading-none">
+                <span className="text-slate-900 font-black text-xl md:text-2xl tracking-tighter">VAULT</span>
+                <span className="text-[8px] md:text-[10px] text-slate-500 font-bold uppercase tracking-wider">Developed by Yogesh</span>
+              </div>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <button 
