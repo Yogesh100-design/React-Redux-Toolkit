@@ -1,15 +1,10 @@
 import React from 'react';
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion';
 import { 
-  Play, Layout, Zap, Users, ShieldCheck, Star, 
-  ArrowRight, Code2, Sparkles, Globe, Heart, Download
+  Play, Zap, Star, ArrowRight, Code2, Sparkles, Heart, Download
 } from 'lucide-react';
-
-const NavLink = ({ children }) => (
-  <a href="#" className="text-slate-500 hover:text-amber-600 transition-colors text-sm font-semibold tracking-tight">{children}</a>
-);
-
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -36,6 +31,15 @@ const LandingPage = () => {
 
   return (
     <div className="bg-[#fdfdf7] text-slate-900 selection:bg-amber-200">
+      <Helmet>
+        <title>Vault | The Visual Web Search Engine</title>
+        <meta name="description" content="Discover millions of high-quality photos, videos, and GIFs. The ultimate creative resource for designers and developers." />
+        <meta property="og:title" content="Vault | The Visual Web Search Engine" />
+        <meta property="og:description" content="Search high-res photos, 4K videos, and trending GIFs from the world's best libraries." />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1000&auto=format&fit=crop" />
+      </Helmet>
+
       {/* --- NAVBAR --- */}
       <nav className="fixed top-0 w-full z-50 border-b border-amber-100 bg-[#fdfdf7]/80 backdrop-blur-md">
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
@@ -46,14 +50,8 @@ const LandingPage = () => {
               </div>
               VAULT
             </span>
-            {/* <div className="hidden md:flex gap-8">
-              <NavLink>The Engine</NavLink>
-              <NavLink>Showcase</NavLink>
-              <NavLink>Developers</NavLink>
-            </div> */}
           </div>
           <div className="flex items-center gap-4">
-            {/* <button className="text-sm font-bold text-slate-500 hover:text-slate-900 transition">Log In</button> */}
             <button 
               onClick={() => navigate('/search')}
               className="bg-amber-400 text-black px-6 py-2.5 rounded-full text-sm font-black hover:bg-amber-300 transition-all shadow-md shadow-amber-200/50"
@@ -154,10 +152,15 @@ const LandingPage = () => {
                            <button 
                             onClick={(e) => handleDownload(e, item.url, i)}
                             className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center hover:bg-white text-white hover:text-black transition-all"
+                            aria-label={`Download ${item.title}`}
+                            title="Download"
                            >
                             <Download size={18} />
                            </button>
-                           <button className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center hover:bg-amber-500 text-white transition-all">
+                           <button 
+                            className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center hover:bg-amber-500 text-white transition-all"
+                            aria-label={`Like ${item.title}`}
+                           >
                              <Heart size={18} fill="currentColor" />
                            </button>
                         </div>
@@ -168,7 +171,8 @@ const LandingPage = () => {
                   {/* Image */}
                   <img 
                     src={item.url} 
-                    alt={item.title}
+                    alt={`${item.title} by ${item.author}`}
+                    loading="lazy"
                     className="w-full h-auto object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out" 
                   />
                 </motion.div>
