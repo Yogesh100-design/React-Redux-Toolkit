@@ -9,6 +9,28 @@ const Collection = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
+  const handleDownload = async (e, url, type, id) => {
+    if (e) e.stopPropagation();
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      const extension =
+        type === "video" ? "mp4" : type === "gif" ? "gif" : "jpg";
+      link.download = `vault-${type}-${id}.${extension}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error("Download failed", err);
+      window.open(url, "_blank");
+    }
+  };
+
   return (
     <>
       {/* 🌟 FLOATING TOGGLE BUTTON GROUP */}
@@ -136,6 +158,13 @@ const Collection = () => {
                                 >
                                     <ExternalLink size={16} strokeWidth={2.5} />
                                 </a>
+                                <button
+                                    onClick={(e) => handleDownload(e, item.src, item.type, item.id)}
+                                    className="p-2.5 rounded-xl bg-green-50 text-green-600 hover:bg-green-600 hover:text-white transition-colors"
+                                    title="Download"
+                                >
+                                    <Download size={16} strokeWidth={2.5} />
+                                </button>
                                 <button
                                     onClick={() => dispatch(removeFromCollection(item.id))}
                                     className="p-2.5 rounded-xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-colors"
