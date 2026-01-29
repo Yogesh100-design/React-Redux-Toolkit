@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setResult,
@@ -8,8 +8,8 @@ import {
   incrementPage,
 } from "../redux/features/SearchSlice";
 import { fetchPhotos, fetchVideos, fetchGifs } from "../api/Api";
-import { motion } from "framer-motion";
-import { Download, Loader2, Plus } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Download, Loader2, Plus, X } from "lucide-react";
 import { addToCollection } from "../redux/features/CollectionSlice";
 import Collection from "./Collection";
 
@@ -18,6 +18,8 @@ const ResultGrid = () => {
   const { query, activeTab, results, loading, error, page } = useSelector(
     (state) => state.search,
   );
+  
+  const [selectedItem, setSelectedItem] = useState(null);
 
   // console.log("ResultGrid State:", { query, activeTab, results, loading, error, page });
 
@@ -136,7 +138,7 @@ const ResultGrid = () => {
   }, [query, activeTab, page, dispatch]);
 
   const handleDownload = async (e, url, type, id) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Stop propagation to prevent modal from opening if download button is clicked
     try {
       const response = await fetch(url);
       const blob = await response.blob();
@@ -194,10 +196,12 @@ const ResultGrid = () => {
           {results.map((item, index) => (
             <motion.div
               key={`${item.type}-${item.id}`}
+              layoutId={`card-${item.id}`} // For shared element transition
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.3 }}
-              className="relative group overflow-hidden rounded-xl shadow-md bg-gray-100 aspect-[4/3]"
+              onClick={() => setSelectedItem(item)}
+              className="relative group overflow-hidden rounded-xl shadow-md bg-gray-100 aspect-[4/3] cursor-pointer"
             >
               {/* Overlay Title */}
               {item.title &&
@@ -223,57 +227,53 @@ const ResultGrid = () => {
                 </div>
               )}
 
+              {/* VIDEO */}
               {item.type === "video" && (
-                <div className="relative w-full h-full bg-black flex items-center justify-center">
-                  {item.src ? (
-                    <>
-                      <video
-                        src={item.src}
-                        poster={item.thumbnail}
-                        controls
-                        preload="metadata"
-                        className="w-full h-full object-contain"
-                      />
+                  <div className="relative w-full h-full bg-black flex items-center justify-center">
+                    {/* Updated: Remove controls to allow click pass-through, play on hover */}
+                    {item.src ? (
+                      <>
+                        <video
+                          src={item.src}
+                          muted
+                          onMouseOver={(e) => e.target.play()}
+                          onMouseOut={(e) => e.target.pause()}
+                          preload="metadata"
+                          className="w-full h-full object-cover"
+                        />
+                        
+                        {/* Play Icon - purely visual */}
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                              <Play size={20} className="text-white fill-current ml-1" />
+                            </div>
+                        </div>
 
-                      {/* ➕ ADD TO COLLECTION BUTTON */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          dispatch(addToCollection(item));
-                        }}
-                        className="absolute top-3 right-3 z-20 w-10 h-10 bg-black/40 hover:bg-amber-500 text-white hover:text-black backdrop-blur-md flex items-center justify-center rounded-full transition-all shadow-lg border border-white/10 group/btn"
-                        title="Add to Collection"
-                      >
-                         <Plus size={20} />
-                      </button>
-                    </>
-                  ) : (
-                    <div className="text-white text-xs text-center p-4">
-                      Video unavailable
-                    </div>
-                  )}
-
-                  {/* ⏱ DURATION */}
-                  {item.duration > 0 && (
-                    <span className="absolute bottom-2 right-2 bg-black/80 text-white text-xs font-bold px-2 py-1 rounded z-10 pointer-events-none">
-                      {Math.round(item.duration)}s
-                    </span>
-                  )}
-
-                  {/* ▶ PLAY ICON OVERLAY */}
-                  {item.src && (
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                      <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                        <svg
-                          className="w-6 h-6 text-white fill-current"
-                          viewBox="0 0 24 24"
+                        {/* Add to collection button inside video wrapper to stay relative */}
+                         <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            dispatch(addToCollection(item));
+                          }}
+                          className="absolute top-3 right-3 z-30 w-10 h-10 bg-black/40 hover:bg-amber-500 text-white hover:text-black backdrop-blur-md flex items-center justify-center rounded-full transition-all shadow-lg border border-white/10 group/btn"
+                          title="Add to Collection"
                         >
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
+                           <Plus size={20} />
+                        </button>
+                      </>
+                    ) : (
+                       <div className="text-white text-xs text-center p-4">
+                        Video unavailable
                       </div>
-                    </div>
-                  )}
-                </div>
+                    )}
+                    
+                    {/* DURATION */}
+                    {item.duration > 0 && (
+                      <span className="absolute bottom-2 right-2 bg-black/80 text-white text-xs font-bold px-2 py-1 rounded z-10 pointer-events-none">
+                        {Math.round(item.duration)}s
+                      </span>
+                    )}
+                  </div>
               )}
 
               {/* GIF */}
@@ -293,7 +293,10 @@ const ResultGrid = () => {
 
               {/* Meta Info */}
               {(item.author || item.user) && (
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 translate-y-0 md:translate-y-full md:group-hover:translate-y-0 transition-transform duration-300 z-20 flex items-center justify-center">
+                <div 
+                    className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 translate-y-0 md:translate-y-full md:group-hover:translate-y-0 transition-transform duration-300 z-20 flex items-center justify-center"
+                    onClick={(e) => e.stopPropagation()} // Prevent clicking meta area from opening modal if preferred
+                >
                   <div className="flex-1 min-w-0 pr-2">
                     <p className="text-white/90 text-xs truncate">
                       {item.type === "video"
@@ -313,7 +316,10 @@ const ResultGrid = () => {
                     <Download size={16} />
                   </button>
                   <button
-                    onClick={() => dispatch(addToCollection(item))}
+                    onClick={(e) => {
+                         e.stopPropagation();
+                         dispatch(addToCollection(item));
+                    }}
                     className="bg-white/20 hover:bg-amber-500 hover:text-black text-white p-1.5 rounded-full backdrop-blur-sm transition-colors flex-shrink-0 ml-2"
                     title="Add to Collection"
                   >
@@ -347,6 +353,80 @@ const ResultGrid = () => {
           </div>
         )}
       </div>
+
+       {/* 🖼️ LIGHTBOX MODAL */}
+       <AnimatePresence>
+        {selectedItem && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 md:p-10"
+            onClick={() => setSelectedItem(null)}
+          >
+            <motion.div
+              layoutId={`card-${selectedItem.id}`}
+              className="relative max-w-5xl w-full max-h-full flex flex-col items-center justify-center outline-none"
+              onClick={(e) => e.stopPropagation()}
+            >
+               {/* CLOSE BUTTON */}
+               <button 
+                 onClick={() => setSelectedItem(null)}
+                 className="absolute -top-12 right-0 md:right-0 text-white/70 hover:text-white transition-colors flex items-center gap-2"
+               >
+                 <span className="uppercase text-xs font-bold tracking-widest hidden md:block">Close</span>
+                 <div className="bg-white/10 p-2 rounded-full backdrop-blur-sm">
+                    <X size={20} />
+                 </div>
+               </button>
+
+               {/* MEDIA CONTENT */}
+               <div className="rounded-xl overflow-hidden shadow-2xl bg-black border border-white/10 w-auto h-auto max-h-[80vh] flex items-center justify-center">
+                  {selectedItem.type === 'video' ? (
+                     <video 
+                       src={selectedItem.src} 
+                       controls 
+                       autoPlay 
+                       className="max-w-full max-h-[80vh] object-contain"
+                     />
+                  ) : (
+                     <img 
+                       src={selectedItem.src} 
+                       alt={selectedItem.title} 
+                       className="max-w-full max-h-[80vh] object-contain"
+                     />
+                  )}
+               </div>
+
+               {/* SUB-INFO (Optional) */}
+               <div className="mt-6 flex items-center gap-4 bg-black/50 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
+                  <div className="text-white">
+                     <p className="font-bold text-sm">{selectedItem.title || "Untitled"}</p>
+                     <p className="text-white/50 text-xs uppercase tracking-wider">{selectedItem.author || selectedItem.user || "Unknown"}</p>
+                  </div>
+                  <div className="h-8 w-[1px] bg-white/20"></div>
+                  <div className="flex gap-2">
+                     <button 
+                        onClick={(e) => handleDownload(e, selectedItem.src, selectedItem.type, selectedItem.id)}
+                        className="p-2 bg-white text-black rounded-full hover:bg-amber-400 transition-colors"
+                        title="Download"
+                     >
+                        <Download size={18} />
+                     </button>
+                     <button
+                        onClick={() => dispatch(addToCollection(selectedItem))}
+                        className="p-2 bg-white/10 text-white rounded-full hover:bg-white hover:text-black transition-colors"
+                        title="Add to Vault"
+                     >
+                        <Plus size={18} />
+                     </button>
+                  </div>
+               </div>
+
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
