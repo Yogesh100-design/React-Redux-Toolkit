@@ -293,7 +293,7 @@ const ResultGrid = () => {
 
               {/* Meta Info */}
               {(item.author || item.user) && (
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20 flex items-center justify-center">
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 translate-y-0 md:translate-y-full md:group-hover:translate-y-0 transition-transform duration-300 z-20 flex items-center justify-center">
                   <div className="flex-1 min-w-0 pr-2">
                     <p className="text-white/90 text-xs truncate">
                       {item.type === "video"
