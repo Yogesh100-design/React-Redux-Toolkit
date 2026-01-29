@@ -6,12 +6,16 @@ const GIPHY_KEY = import.meta.env.VITE_GIPHY_KEY;
 
 const BASE_URL = 'https://api.giphy.com/v1/gifs';
 
-export async function fetchPhotos(query,page,page_size=20){
+export async function fetchPhotos(query, page, page_size = 20) {
+  if (!SPLASH_KEY) {
+    console.error("Unsplash API Key is missing! Check your environment variables.");
+    throw new Error("API Key Missing");
+  }
   try {
     const response = await axios.get('https://api.unsplash.com/search/photos',
       {
-          params:{query,page,per_page:page_size},
-          headers:{Authorization:  `Client-ID ${SPLASH_KEY}`}
+        params: { query, page, per_page: page_size },
+        headers: { Authorization: `Client-ID ${SPLASH_KEY}` }
       }
     )
 
@@ -24,15 +28,19 @@ export async function fetchPhotos(query,page,page_size=20){
 }
 
 export async function fetchVideos(query, page = 1, per_page = 20) {
+  if (!PIXEL_KEY) {
+    console.error("Pexels API Key is missing! Check your environment variables.");
+    throw new Error("API Key Missing");
+  }
   try {
     const response = await axios.get('https://api.pexels.com/videos/search', {
-      params: { 
-        query, 
-        page, 
-        per_page 
+      params: {
+        query,
+        page,
+        per_page
       },
-      headers: { 
-        Authorization: PIXEL_KEY 
+      headers: {
+        Authorization: PIXEL_KEY
       }
     });
 
@@ -45,6 +53,10 @@ export async function fetchVideos(query, page = 1, per_page = 20) {
 }
 
 export const fetchGifs = async (query, page = 1, limit = 20) => {
+  if (!GIPHY_KEY) {
+    console.error("Giphy API Key is missing! Check your environment variables.");
+    throw new Error("API Key Missing");
+  }
   try {
     // If no query, we show 'trending', otherwise we use 'search'
     const endpoint = query ? `${BASE_URL}/search` : `${BASE_URL}/trending`;
@@ -59,7 +71,7 @@ export const fetchGifs = async (query, page = 1, limit = 20) => {
         rating: 'g', // Safe for work
       },
     });
-    
+
     console.log('GIFs Response:', response.data);
     return response.data;
   } catch (error) {

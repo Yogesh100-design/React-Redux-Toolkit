@@ -63,31 +63,31 @@ const LandingPage = () => {
       </nav>
 
       {/* --- HERO SECTION --- */}
-      <section className="pt-40 pb-24 px-6 relative">
+      <section className="pt-32 md:pt-40 pb-16 md:pb-24 px-6 relative">
         <div className="container mx-auto text-center max-w-4xl relative z-10">
           <motion.div 
             initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/50 border border-amber-200 text-amber-700 text-xs font-bold mb-10 uppercase tracking-wider"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/50 border border-amber-200 text-amber-700 text-[10px] md:text-xs font-bold mb-8 md:mb-10 uppercase tracking-wider"
           >
             <Sparkles size={14} /> NEW: TRIPLE-SOURCE ENGINE
           </motion.div>
-          <h1 className="text-6xl md:text-8xl font-black text-slate-900 mb-8 tracking-tighter leading-[0.9]">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 mb-6 md:mb-8 tracking-tighter leading-[0.9]">
             SEARCH THE <br />
             <span className="text-amber-500 italic">VISUAL WEB.</span>
           </h1>
-          <p className="text-xl text-slate-500 mb-12 max-w-2xl mx-auto font-medium leading-relaxed">
+          <p className="text-lg md:text-xl text-slate-500 mb-8 md:mb-12 max-w-2xl mx-auto font-medium leading-relaxed px-4">
             The ultimate creative resource. Instantly search high-res photos, 4K videos, and trending GIFs from the world's best libraries.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 md:gap-4 px-4 sm:px-0">
             <button 
               onClick={() => navigate('/search')}
-              className="bg-slate-900 hover:bg-slate-800 text-white px-10 py-5 rounded-2xl font-black transition-all shadow-xl shadow-slate-200 flex items-center justify-center gap-2"
+              className="bg-slate-900 hover:bg-slate-800 text-white px-8 md:px-10 py-4 md:py-5 rounded-xl md:rounded-2xl font-black transition-all shadow-xl shadow-slate-200 flex items-center justify-center gap-2 text-sm md:text-base"
             >
               Start Building <ArrowRight size={20} />
             </button>
             <button 
               onClick={() => navigate('/search')}
-              className="bg-white border-2 border-slate-100 hover:border-amber-200 text-slate-700 px-10 py-5 rounded-2xl font-black transition-all flex items-center justify-center gap-2"
+              className="bg-white border-2 border-slate-100 hover:border-amber-200 text-slate-700 px-8 md:px-10 py-4 md:py-5 rounded-xl md:rounded-2xl font-black transition-all flex items-center justify-center gap-2 text-sm md:text-base"
             >
               Explore Media
             </button>
