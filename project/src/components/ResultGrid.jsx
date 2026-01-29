@@ -241,9 +241,10 @@ const ResultGrid = () => {
                           e.stopPropagation();
                           dispatch(addToCollection(item));
                         }}
-                        className="absolute top-2 left-2 z-20 bg-yellow-400 hover:bg-yellow-500 text-black text-xs font-semibold px-3 py-1 rounded shadow"
+                        className="absolute top-3 right-3 z-20 w-10 h-10 bg-black/40 hover:bg-amber-500 text-white hover:text-black backdrop-blur-md flex items-center justify-center rounded-full transition-all shadow-lg border border-white/10 group/btn"
+                        title="Add to Collection"
                       >
-                        Add to collection
+                         <Plus size={20} />
                       </button>
                     </>
                   ) : (
@@ -313,9 +314,10 @@ const ResultGrid = () => {
                   </button>
                   <button
                     onClick={() => dispatch(addToCollection(item))}
-                    className="bg-white/20 hover:bg-white/40 text-white p-1.5 rounded-full backdrop-blur-sm transition-colors flex-shrink-0 ml-2 py-2"
+                    className="bg-white/20 hover:bg-amber-500 hover:text-black text-white p-1.5 rounded-full backdrop-blur-sm transition-colors flex-shrink-0 ml-2"
+                    title="Add to Collection"
                   >
-                    add to collection
+                    <Plus size={16} />
                   </button>
                 </div>
               )}
