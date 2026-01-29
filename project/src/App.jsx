@@ -1,4 +1,3 @@
-import { fetchGifs, fetchPhotos, fetchVideos } from './api/Api'
 import './App.css'
 import StaticLandingPage from './pages/LandingPage'
 import SearchBar from './components/SearchBar';
@@ -21,7 +20,7 @@ function App() {
   // }
 return (
     <>
-    {/* <StaticLandingPage/> */}
+    <StaticLandingPage/>
     {/* <button className='w-xl bg-black text-white' onClick={getPhotos}>search</button>
     <button className='w-xl bg-black text-white' onClick={getVideos}>search</button>
     <button className='w-xl bg-black text-white' onClick={getGifs}>search</button> */}

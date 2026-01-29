@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveTab } from "../redux/features/SearchSlice";
 
@@ -8,6 +8,13 @@ const Tabs = () => {
   
   // Pulling activeTab from Redux state to handle conditional styling
   const activeTab = useSelector((state) => state.search.activeTab);
+
+  // Set default tab on mount
+  useEffect(() => {
+    if (!activeTab) {
+      dispatch(setActiveTab("Photos"));
+    }
+  }, []);
 
   return (
     <div className="flex items-center justify-center py-10">

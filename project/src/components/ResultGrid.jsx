@@ -8,6 +8,8 @@ const ResultGrid = () => {
   const dispatch = useDispatch();
   const { query, activeTab, results, loading, error } = useSelector((state) => state.search);
   
+  console.log("ResultGrid State:", { query, activeTab, results, loading, error });
+  
   useEffect(() => {
     let isActive = true;
     
@@ -26,7 +28,9 @@ const ResultGrid = () => {
 
         if (activeTab === "Photos") {
           const response = await fetchPhotos(query);
-          const photos = Array.isArray(response?.data) ? response.data : [];
+          console.log("Photos API Response:", response);
+          const photos = Array.isArray(response?.results) ? response.results : [];
+          console.log("Extracted photos array:", photos);
           
           normalizedData = photos.map((item) => ({
             id: item.id,
@@ -37,6 +41,7 @@ const ResultGrid = () => {
             author: item.user?.name || 'Unknown',
             color: item.color || '#f3f4f6'
           }));
+          console.log("Normalized photos data:", normalizedData);
         } 
         else if (activeTab === "Videos") {
           const response = await fetchVideos(query);
@@ -79,6 +84,7 @@ const ResultGrid = () => {
         }
 
         if (isActive) {
+          console.log("Setting results:", normalizedData);
           dispatch(setResult(normalizedData));
         }
 

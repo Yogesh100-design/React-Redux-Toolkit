@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const SearchSlice = createSlice({
-  name: "serach",
+  name: "search",
   initialState: {
     query: "",
     activeTab: "",
-    result: "",
+    results: [],
     loading: false,
     error: "",
   },
@@ -17,11 +17,11 @@ export const SearchSlice = createSlice({
       state.activeTab = action.payload;
     },
     setResult(state, action) {
-      state.result = action.payload;
+      state.results = action.payload;
       state.loading = false;
     },
-    setLoading(state) {
-      state.loading = true;
+    setLoading(state, action) {
+      state.loading = action.payload;
       state.error = null;
     },
     setError(state, action) {
@@ -29,7 +29,7 @@ export const SearchSlice = createSlice({
       state.loading = false;
     },
     clearResult(state) {
-      state.result = [];
+      state.results = [];
     },
   },
 });
