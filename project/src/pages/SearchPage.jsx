@@ -26,7 +26,10 @@ const SearchPage = () => {
                         <div className="w-10 h-10 bg-amber-400 rounded-xl flex items-center justify-center text-black shadow-sm">
                             <Play size={20} fill="currentColor" />
                         </div>
-                        <span className="text-slate-900 font-black text-2xl tracking-tighter">VAULT</span>
+                        <div className="flex flex-col leading-none">
+                            <span className="text-slate-900 font-black text-2xl tracking-tighter">VAULT</span>
+                            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Developed by Yogesh</span>
+                        </div>
                     </Link>
                 </div>
             </header>
