@@ -11,23 +11,34 @@ const Collection = () => {
 
   return (
     <>
-      {/* 🌟 FLOATING TOGGLE BUTTON */}
-      <motion.button
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setOpen(!open)}
-        className="fixed bottom-8 right-8 z-[60] bg-slate-900 text-amber-400 p-4 rounded-full shadow-2xl shadow-indigo-900/20 border-4 border-white ring-4 ring-amber-100 flex items-center justify-center group overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-amber-400/20 rounded-full scale-0 group-hover:scale-150 transition-transform duration-500" />
-        <Archive size={24} strokeWidth={2.5} className="relative z-10" />
-        {collection.length > 0 && (
-          <span className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white text-[10px] font-black flex items-center justify-center rounded-full border-2 border-white animate-bounce">
-            {collection.length}
-          </span>
-        )}
-      </motion.button>
+      {/* 🌟 FLOATING TOGGLE BUTTON GROUP */}
+      <div className="fixed bottom-8 right-8 z-[60] flex items-center gap-3 pointer-events-none">
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1 }}
+          className="pointer-events-auto bg-white/90 backdrop-blur-md text-slate-900 px-5 py-2.5 rounded-full font-bold shadow-xl border border-white/50 text-sm tracking-wide hidden sm:block"
+        >
+          My Vault
+        </motion.div>
+
+        <motion.button
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setOpen(!open)}
+          className="pointer-events-auto bg-slate-900 text-amber-400 p-4 rounded-full shadow-2xl shadow-indigo-900/20 border-4 border-white ring-4 ring-amber-100 flex items-center justify-center group overflow-hidden relative"
+        >
+          <div className="absolute inset-0 bg-amber-400/20 rounded-full scale-0 group-hover:scale-150 transition-transform duration-500" />
+          <Archive size={24} strokeWidth={2.5} className="relative z-10" />
+          {collection.length > 0 && (
+            <span className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white text-[10px] font-black flex items-center justify-center rounded-full border-2 border-white animate-bounce z-20">
+              {collection.length}
+            </span>
+          )}
+        </motion.button>
+      </div>
 
       {/* 📦 DRAWER PANEL */}
       <AnimatePresence>
@@ -139,13 +150,6 @@ const Collection = () => {
                   </AnimatePresence>
                 )}
               </div>
-
-               {/* FOOTER */}
-               <div className="p-8 border-t border-slate-100 bg-white">
-                  <button className="w-full py-4 rounded-2xl bg-slate-900 text-white font-black text-sm tracking-widest uppercase hover:bg-amber-500 hover:text-black transition-all shadow-xl shadow-slate-200 hover:shadow-amber-500/20 flex items-center justify-center gap-3">
-                    <Download size={20} /> Download Everything
-                  </button>
-               </div>
             </motion.div>
           </>
         )}
