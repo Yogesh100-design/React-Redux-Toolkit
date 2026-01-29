@@ -32,7 +32,7 @@ const SearchBar = () => {
         className="px-6 py-2.5 md:px-8 md:py-3 text-xs md:text-sm font-black uppercase tracking-wider rounded-full
                    bg-amber-400 text-black shadow-md shadow-amber-200/50
                    hover:bg-amber-300 active:scale-95
-                   transition-all flex-shrink-0"
+                   transition-all flex-shrink-0 cursor-pointer"
       >
         Search
       </button>

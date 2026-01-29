@@ -29,7 +29,7 @@ const Tabs = () => {
               onClick={() => dispatch(setActiveTab(tab))}
               className={`
                 relative px-8 py-2.5 text-[10px] uppercase tracking-[0.2em] font-black rounded-xl 
-                transition-all duration-500 ease-out overflow-hidden
+                transition-all duration-500 ease-out overflow-hidden cursor-pointer
                 ${isActive 
                   ? "bg-amber-400 text-black shadow-[0_4px_20px_rgba(251,191,36,0.4)] scale-105" 
                   : "text-zinc-400 hover:text-zinc-900 hover:bg-white/50 active:scale-95"

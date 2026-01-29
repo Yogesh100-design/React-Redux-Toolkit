@@ -310,7 +310,7 @@ const ResultGrid = () => {
                     onClick={(e) =>
                       handleDownload(e, item.src, item.type, item.id)
                     }
-                    className="bg-white/20 hover:bg-white/40 text-white p-1.5 rounded-full backdrop-blur-sm transition-colors flex-shrink-0"
+                    className="bg-white/20 hover:bg-white/40 text-white p-1.5 rounded-full backdrop-blur-sm transition-colors flex-shrink-0 cursor-pointer"
                     title="Download"
                   >
                     <Download size={16} />
@@ -320,7 +320,7 @@ const ResultGrid = () => {
                          e.stopPropagation();
                          dispatch(addToCollection(item));
                     }}
-                    className="bg-white/20 hover:bg-amber-500 hover:text-black text-white p-1.5 rounded-full backdrop-blur-sm transition-colors flex-shrink-0 ml-2"
+                    className="bg-white/20 hover:bg-amber-500 hover:text-black text-white p-1.5 rounded-full backdrop-blur-sm transition-colors flex-shrink-0 ml-2 cursor-pointer"
                     title="Add to Collection"
                   >
                     <Plus size={16} />
@@ -415,7 +415,7 @@ const ResultGrid = () => {
                      </button>
                      <button
                         onClick={() => dispatch(addToCollection(selectedItem))}
-                        className="p-2 bg-white/10 text-white rounded-full hover:bg-white hover:text-black transition-colors"
+                        className="p-2 bg-white/10 text-white rounded-full hover:bg-white hover:text-black transition-colors cursor-pointer"
                         title="Add to Vault"
                      >
                         <Plus size={18} />
