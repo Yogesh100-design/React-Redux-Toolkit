@@ -42,11 +42,11 @@ const LandingPage = () => {
 
       {/* --- NAVBAR --- */}
       <nav className="fixed top-0 w-full z-50 border-b border-amber-100 bg-[#fdfdf7]/80 backdrop-blur-md">
-        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+        <div className="container mx-auto px-6 h-16 md:h-20 flex items-center justify-between">
           <div className="flex items-center gap-10">
-            <span className="text-slate-900 font-black text-2xl tracking-tighter flex items-center gap-2">
-              <div className="w-10 h-10 bg-amber-400 rounded-xl flex items-center justify-center text-black shadow-sm">
-                <Play size={20} fill="currentColor" />
+            <span className="text-slate-900 font-black text-xl md:text-2xl tracking-tighter flex items-center gap-2">
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-amber-400 rounded-xl flex items-center justify-center text-black shadow-sm">
+                <Play size={18} fill="currentColor" />
               </div>
               VAULT
             </span>
@@ -54,7 +54,7 @@ const LandingPage = () => {
           <div className="flex items-center gap-4">
             <button 
               onClick={() => navigate('/search')}
-              className="bg-amber-400 text-black px-6 py-2.5 rounded-full text-sm font-black hover:bg-amber-300 transition-all shadow-md shadow-amber-200/50"
+              className="bg-amber-400 text-black px-4 py-2 md:px-6 md:py-2.5 rounded-full text-xs md:text-sm font-black hover:bg-amber-300 transition-all shadow-md shadow-amber-200/50"
             >
               Get Started
             </button>
@@ -96,32 +96,32 @@ const LandingPage = () => {
       </section>
 
       {/* --- MASONRY PREVIEW / COLLECTION SECTION --- */}
-      <section className="px-6 pb-32">
+      <section className="px-4 md:px-6 pb-20 md:pb-32">
         <div className="container mx-auto max-w-7xl">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex flex-col md:flex-row items-end justify-between mb-12 gap-6"
+            className="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-12 gap-6"
           >
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <span className="w-8 h-[2px] bg-amber-500"></span>
-                <span className="text-amber-600 font-bold uppercase tracking-widest text-xs">Trending Now</span>
+              <div className="flex items-center gap-2 mb-3 md:mb-4">
+                <span className="w-6 md:w-8 h-[2px] bg-amber-500"></span>
+                <span className="text-amber-600 font-bold uppercase tracking-widest text-[10px] md:text-xs">Trending Now</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter">
                 Curated <span className="text-amber-500 italic">Collections.</span>
               </h2>
             </div>
             <button 
               onClick={() => navigate('/search')}
-              className="group flex items-center gap-2 text-slate-900 font-bold hover:text-amber-600 transition-colors"
+              className="group flex items-center gap-2 text-slate-900 font-bold hover:text-amber-600 transition-colors text-sm md:text-base"
             >
-              View All Collections <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              View All Collections <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>
           </motion.div>
 
-          <div className="p-8 bg-white border border-amber-100/50 rounded-[3rem] shadow-2xl shadow-amber-900/5">
+          <div className="p-4 md:p-8 bg-white border border-amber-100/50 rounded-3xl md:rounded-[3rem] shadow-2xl shadow-amber-900/5">
             <div className="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-8">
               {[
                 { url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1000&auto=format&fit=crop", title: "Atmospheric Nature", author: "Anders Jilden" },
@@ -183,31 +183,31 @@ const LandingPage = () => {
       </section>
 
       {/* --- BENTO GRID FEATURES --- */}
-      <section className="py-24 bg-[#f9f9f2] border-y border-amber-100">
+      <section className="py-16 md:py-24 bg-[#f9f9f2] border-y border-amber-100">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto">
             {/* Big Card */}
-            <div className="md:col-span-8 bg-white border border-amber-100 rounded-[2.5rem] p-12 relative overflow-hidden group shadow-sm hover:shadow-md transition-all">
-              <Code2 className="text-amber-500 mb-6" size={40} />
-              <h3 className="text-4xl font-black text-slate-900 mb-6 tracking-tight">Unsplash + Pexels <br/> + Giphy</h3>
-              <p className="text-slate-500 text-lg max-w-sm leading-relaxed">One search bar, three distinct universes of content. Switch tabs to explore Photos, Videos, or GIFs instantly.</p>
+            <div className="md:col-span-8 bg-white border border-amber-100 rounded-3xl md:rounded-[2.5rem] p-6 md:p-12 relative overflow-hidden group shadow-sm hover:shadow-md transition-all">
+              <Code2 className="text-amber-500 mb-6" size={32} />
+              <h3 className="text-3xl md:text-4xl font-black text-slate-900 mb-6 tracking-tight">Unsplash + Pexels <br/> + Giphy</h3>
+              <p className="text-slate-500 text-base md:text-lg max-w-sm leading-relaxed">One search bar, three distinct universes of content. Switch tabs to explore Photos, Videos, or GIFs instantly.</p>
             </div>
 
             {/* Small Card */}
-            <div className="md:col-span-4 bg-amber-400 rounded-[2.5rem] p-12 text-black flex flex-col justify-between">
-              <Zap size={40} strokeWidth={2.5} />
-              <h3 className="text-2xl font-black leading-tight uppercase italic tracking-tighter">Lightning <br/> Fast Search.</h3>
+            <div className="md:col-span-4 bg-amber-400 rounded-3xl md:rounded-[2.5rem] p-6 md:p-12 text-black flex flex-col justify-between gap-8 md:gap-0">
+              <Zap size={32} strokeWidth={2.5} />
+              <h3 className="text-xl md:text-2xl font-black leading-tight uppercase italic tracking-tighter">Lightning <br/> Fast Search.</h3>
             </div>
 
             {/* Tech Card */}
-            <div className="md:col-span-12 bg-slate-900 rounded-[2.5rem] p-12 flex flex-col md:flex-row justify-between items-center text-white">
+            <div className="md:col-span-12 bg-slate-900 rounded-3xl md:rounded-[2.5rem] p-6 md:p-12 flex flex-col md:flex-row justify-between items-center text-white text-center md:text-left">
               <div>
-                <h3 className="text-3xl font-bold mb-2">Curated for Creators.</h3>
-                <p className="text-slate-400">Find the perfect asset for your next video, website, or social post.</p>
+                <h3 className="text-2xl md:text-3xl font-bold mb-2">Curated for Creators.</h3>
+                <p className="text-slate-400 text-sm md:text-base">Find the perfect asset for your next video, website, or social post.</p>
               </div>
-              <div className="flex gap-4 mt-8 md:mt-0">
+              <div className="flex flex-wrap justify-center gap-3 md:gap-4 mt-8 md:mt-0">
                 {['Photos', 'Videos', 'GIFs'].map(tag => (
-                  <span key={tag} className="px-5 py-2 bg-white/10 border border-white/20 rounded-xl text-xs font-black uppercase tracking-widest">{tag}</span>
+                  <span key={tag} className="px-4 md:px-5 py-2 bg-white/10 border border-white/20 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-widest">{tag}</span>
                 ))}
               </div>
             </div>
@@ -216,19 +216,19 @@ const LandingPage = () => {
       </section>
 
       {/* --- TESTIMONIALS --- */}
-      <section className="py-32">
+      <section className="py-16 md:py-32">
         <div className="container mx-auto px-6">
-          <h2 className="text-center text-4xl font-black text-slate-900 mb-20 tracking-tighter uppercase italic">Words from the vault</h2>
-          <div className="grid md:grid-cols-3 gap-10">
+          <h2 className="text-center text-3xl md:text-4xl font-black text-slate-900 mb-12 md:mb-20 tracking-tighter uppercase italic">Words from the vault</h2>
+          <div className="grid md:grid-cols-3 gap-6 md:gap-10">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="p-10 bg-white border border-slate-100 rounded-[2.5rem] shadow-sm relative">
+              <div key={i} className="p-6 md:p-10 bg-white border border-slate-100 rounded-3xl md:rounded-[2.5rem] shadow-sm relative">
                 <Star className="text-amber-400 mb-6" size={24} fill="currentColor" />
-                <p className="text-slate-600 mb-8 font-medium italic leading-relaxed">"The best tool for finding inspiration. I use it every day to gather assets for my client projects."</p>
+                <p className="text-slate-600 mb-6 md:mb-8 font-medium italic leading-relaxed text-sm md:text-base">"The best tool for finding inspiration. I use it every day to gather assets for my client projects."</p>
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center font-bold text-amber-700 italic text-xl">Y</div>
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-amber-100 flex items-center justify-center font-bold text-amber-700 italic text-xl">Y</div>
                   <div>
-                    <p className="text-sm font-black text-slate-900 uppercase tracking-tighter">Yogesh Kumar</p>
-                    <p className="text-xs text-amber-600 font-bold uppercase tracking-widest">Creative Director</p>
+                    <p className="text-xs md:text-sm font-black text-slate-900 uppercase tracking-tighter">Yogesh Kumar</p>
+                    <p className="text-[10px] md:text-xs text-amber-600 font-bold uppercase tracking-widest">Creative Director</p>
                   </div>
                 </div>
               </div>
