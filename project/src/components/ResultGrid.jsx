@@ -9,7 +9,7 @@ import {
 } from "../redux/features/SearchSlice";
 import { fetchPhotos, fetchVideos, fetchGifs } from "../api/Api";
 import { motion, AnimatePresence } from "framer-motion";
-import { Download, Loader2, Plus, X } from "lucide-react";
+import { Download, Loader2, Plus, X, Play } from "lucide-react";
 import { addToCollection } from "../redux/features/CollectionSlice";
 import Collection from "./Collection";
 
