@@ -97,37 +97,83 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* --- MASONRY PREVIEW --- */}
-      <section className="px-6 pb-24">
-        <div className="container mx-auto max-w-6xl p-6 bg-white border border-amber-100 rounded-[3rem] shadow-2xl shadow-amber-200/20 overflow-hidden">
-          <div className="columns-2 md:columns-4 gap-6 space-y-6">
-            {[
-  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1000&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=1000&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1503264116251-35a269479413?q=80&w=1000&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1000&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1000&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1000&auto=format&fit=crop"
-]
-.map((img, i) => (
-              <div key={i} className={`bg-amber-50 rounded-[2rem] overflow-hidden border border-amber-100/50 group cursor-pointer relative break-inside-avoid ${i % 2 === 0 ? 'aspect-[3/4]' : 'aspect-square'}`}>
-                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity z-10 p-6 flex flex-col justify-end">
-                  <div className="flex justify-end gap-2">
-                    <button 
-                      onClick={(e) => handleDownload(e, img, i)}
-                      className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-amber-100 transition-colors"
-                      title="Download"
-                    >
-                      <Download size={16} className="text-slate-900" />
-                    </button>
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm">
-                      <Heart size={16} className="text-amber-500" fill="currentColor"/>
+      {/* --- MASONRY PREVIEW / COLLECTION SECTION --- */}
+      <section className="px-6 pb-32">
+        <div className="container mx-auto max-w-7xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col md:flex-row items-end justify-between mb-12 gap-6"
+          >
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="w-8 h-[2px] bg-amber-500"></span>
+                <span className="text-amber-600 font-bold uppercase tracking-widest text-xs">Trending Now</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter">
+                Curated <span className="text-amber-500 italic">Collections.</span>
+              </h2>
+            </div>
+            <button 
+              onClick={() => navigate('/search')}
+              className="group flex items-center gap-2 text-slate-900 font-bold hover:text-amber-600 transition-colors"
+            >
+              View All Collections <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </motion.div>
+
+          <div className="p-8 bg-white border border-amber-100/50 rounded-[3rem] shadow-2xl shadow-amber-900/5">
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-8">
+              {[
+                { url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1000&auto=format&fit=crop", title: "Atmospheric Nature", author: "Anders Jilden" },
+                { url: "https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=1000&auto=format&fit=crop", title: "Urban Exploration", author: "Marcus L." },
+                { url: "https://images.unsplash.com/photo-1503264116251-35a269479413?q=80&w=1000&auto=format&fit=crop", title: "Modern Architecture", author: "Simone H." },
+                { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1000&auto=format&fit=crop", title: "Alpine Stars", author: "Benjamin V." },
+                { url: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1000&auto=format&fit=crop", title: "Coastal Waves", author: "Silas B." },
+                { url: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1000&auto=format&fit=crop", title: "Dark Portraits", author: "Elijah O." }
+              ].map((item, i) => (
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  className="break-inside-avoid relative group rounded-[2rem] overflow-hidden bg-slate-100 cursor-pointer"
+                >
+                  {/* Glass Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-10 flex flex-col justify-end p-8">
+                    <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                      <div className="flex justify-between items-end">
+                        <div>
+                          <p className="text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">Collection</p>
+                          <h3 className="text-white font-bold text-xl leading-tight">{item.title}</h3>
+                          <p className="text-slate-300 text-sm mt-2">by {item.author}</p>
+                        </div>
+                        <div className="flex gap-3">
+                           <button 
+                            onClick={(e) => handleDownload(e, item.url, i)}
+                            className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center hover:bg-white text-white hover:text-black transition-all"
+                           >
+                            <Download size={18} />
+                           </button>
+                           <button className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center hover:bg-amber-500 text-white transition-all">
+                             <Heart size={18} fill="currentColor" />
+                           </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <img src={img} alt="Gallery" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
-              </div>
-            ))}
+                  
+                  {/* Image */}
+                  <img 
+                    src={item.url} 
+                    alt={item.title}
+                    className="w-full h-auto object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out" 
+                  />
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
