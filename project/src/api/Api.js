@@ -44,16 +44,18 @@ export async function fetchVideos(query, page = 1, per_page = 20) {
   }
 }
 
-export const fetchGifs = async (query, limit = 20) => {
+export const fetchGifs = async (query, page = 1, limit = 20) => {
   try {
     // If no query, we show 'trending', otherwise we use 'search'
     const endpoint = query ? `${BASE_URL}/search` : `${BASE_URL}/trending`;
-    
+    const offset = (page - 1) * limit;
+
     const response = await axios.get(endpoint, {
       params: {
         api_key: GIPHY_KEY,
         q: query,
         limit: limit,
+        offset: offset,
         rating: 'g', // Safe for work
       },
     });

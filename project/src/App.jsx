@@ -1,33 +1,14 @@
 import './App.css'
-import StaticLandingPage from './pages/LandingPage'
-import SearchBar from './components/SearchBar';
-import Tabs from './components/Tabs';
-import ResultGrid from './components/ResultGrid';
+import { Routes, Route } from 'react-router-dom';
+import LandingPage from './pages/LandingPage';
+import SearchPage from './pages/SearchPage';
 
 function App() {
-
-  // function getPhotos(){
-  //   const data = fetchPhotos('cat');
-  //   console.log(data);
-  // }
-  // function getVideos(){
-  //   const data = fetchVideos('cat');
-  //   console.log(data);
-  // }
-  // function getGifs(){
-  //   const data = fetchGifs('cat');
-  //   console.log(data);
-  // }
-return (
-    <>
-    <StaticLandingPage/>
-    {/* <button className='w-xl bg-black text-white' onClick={getPhotos}>search</button>
-    <button className='w-xl bg-black text-white' onClick={getVideos}>search</button>
-    <button className='w-xl bg-black text-white' onClick={getGifs}>search</button> */}
-    <SearchBar/>
-    <Tabs/>
-    <ResultGrid/>
-    </>
+  return (
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/search" element={<SearchPage />} />
+    </Routes>
   )
 }
 

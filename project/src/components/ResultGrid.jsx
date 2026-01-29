@@ -1,21 +1,26 @@
-import { useEffect, useRef } from "react";
+import {  useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setResult, setLoading, setError } from "../redux/features/SearchSlice";
+import { setResult, setLoading, setError, appendResults, incrementPage } from "../redux/features/SearchSlice";
 import { fetchPhotos, fetchVideos, fetchGifs } from "../api/Api";
 import { motion } from "framer-motion";
+import { Download, Loader2, Plus } from "lucide-react";
+import { addToCollection } from "../redux/features/CollectionSlice";
+import Collection from "./Collection";
 
 const ResultGrid = () => {
   const dispatch = useDispatch();
-  const { query, activeTab, results, loading, error } = useSelector((state) => state.search);
+  const { query, activeTab, results, loading, error, page } = useSelector((state) => state.search);
   
-  console.log("ResultGrid State:", { query, activeTab, results, loading, error });
+  // console.log("ResultGrid State:", { query, activeTab, results, loading, error, page });
   
   useEffect(() => {
     let isActive = true;
     
     const getData = async () => {
       if (!query || !query.trim()) {
-        dispatch(setResult([]));
+        if (page === 1) {
+          dispatch(setResult([]));
+        }
         dispatch(setLoading(false))
         return;
       }
@@ -27,10 +32,9 @@ const ResultGrid = () => {
         let normalizedData = [];
 
         if (activeTab === "Photos") {
-          const response = await fetchPhotos(query);
-          console.log("Photos API Response:", response);
+          const response = await fetchPhotos(query, page);
+          // console.log("Photos API Response:", response);
           const photos = Array.isArray(response?.results) ? response.results : [];
-          console.log("Extracted photos array:", photos);
           
           normalizedData = photos.map((item) => ({
             id: item.id,
@@ -41,10 +45,9 @@ const ResultGrid = () => {
             author: item.user?.name || 'Unknown',
             color: item.color || '#f3f4f6'
           }));
-          console.log("Normalized photos data:", normalizedData);
         } 
         else if (activeTab === "Videos") {
-          const response = await fetchVideos(query);
+          const response = await fetchVideos(query, page);
           const videos = Array.isArray(response?.videos) ? response.videos : [];
           
           normalizedData = videos.map((item) => {
@@ -66,7 +69,7 @@ const ResultGrid = () => {
           }).filter(item => item.src);
         } 
         else if (activeTab === "GIF") {
-          const response = await fetchGifs(query);
+          const response = await fetchGifs(query, page);
           const gifs = Array.isArray(response?.data) ? response.data : [];
           
           normalizedData = gifs.map((item) => ({
@@ -85,14 +88,18 @@ const ResultGrid = () => {
 
         if (isActive) {
           console.log("Setting results:", normalizedData);
-          dispatch(setResult(normalizedData));
+          if (page === 1) {
+            dispatch(setResult(normalizedData));
+          } else {
+            dispatch(appendResults(normalizedData));
+          }
         }
 
       } catch (err) {
         console.error("Fetch Error in Component:", err);
         if (isActive) {
           dispatch(setError("Failed to fetch data. Please check your API keys or connection."));
-          dispatch(setResult([]));
+          if (page === 1) dispatch(setResult([]));
         }
       } finally {
         if (isActive) {
@@ -103,30 +110,50 @@ const ResultGrid = () => {
 
     getData();
 
-    // Cleanup: mark this effect as inactive
     return () => {
       isActive = false;
     };
-  }, [query, activeTab, dispatch]);
+  }, [query, activeTab, page, dispatch]);
 
-  if (loading) {
+  const handleDownload = async (e, url, type, id) => {
+    e.stopPropagation();
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      const extension = type === 'video' ? 'mp4' : type === 'gif' ? 'gif' : 'jpg';
+      link.download = `vault-${type}-${id}.${extension}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error("Download failed", err);
+      window.open(url, '_blank');
+    }
+  };
+
+  if (loading && page === 1) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-400"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-10 text-center text-red-500 bg-red-50 rounded-lg m-4">
+      <div className="p-10 text-center text-red-500 bg-red-50 rounded-lg m-4 border border-red-100">
         <p className="font-semibold mb-2">Error Loading Content</p>
         <p className="text-sm">{error}</p>
       </div>
     );
   }
 
-  if (!Array.isArray(results) || results.length === 0) {
+  if (!loading && (!Array.isArray(results) || results.length === 0)) {
     return (
       <div className="text-center py-20 text-gray-400">
         {query ? (
@@ -139,100 +166,139 @@ const ResultGrid = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-      {results.map((item, index) => (
-        <motion.div 
-          key={`${item.type}-${item.id}`}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: Math.min(index * 0.05, 0.3), duration: 0.3 }}
-          className="relative group overflow-hidden rounded-xl shadow-md bg-gray-100 aspect-[4/3]"
-        >
-          {/* Overlay Title */}
-          {item.title && item.title !== 'Untitled' && item.title !== 'Video' && (
-            <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/70 via-black/20 to-transparent p-3 pt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <p className="text-white text-sm font-medium truncate leading-tight">
-                {item.title}
-              </p>
-            </div>
-          )}
-
-          {/* PHOTO */}
-          {item.type === "photo" && (
-            <div className="w-full h-full">
-              <img 
-                src={item.src} 
-                alt={item.title || 'Photo'} 
-                loading="lazy"
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                style={{ backgroundColor: item.color }}
-              />
-            </div>
-          )}
-
-          {/* VIDEO */}
-          {item.type === "video" && (
-            <div className="relative w-full h-full bg-black flex items-center justify-center">
-              {item.src ? (
-                <video 
-                  src={item.src} 
-                  poster={item.thumbnail}
-                  controls 
-                  preload="metadata"
-                  className="w-full h-full object-contain"
-                />
-              ) : (
-                <div className="text-white text-xs text-center p-4">Video unavailable</div>
-              )}
-              
-              {item.duration > 0 && (
-                <span className="absolute bottom-2 right-2 bg-black/80 text-white text-xs font-bold px-2 py-1 rounded z-10 pointer-events-none">
-                  {Math.round(item.duration)}s
-                </span>
-              )}
-              
-              {item.src && (
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                    <svg className="w-6 h-6 text-white fill-current" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* GIF */}
-          {item.type === "gif" && (
-            <div className="w-full h-full bg-gray-900 flex items-center justify-center relative">
-              <img 
-                src={item.src} 
-                alt={item.title || 'GIF'} 
-                loading="lazy"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-2 left-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider font-bold pointer-events-none">
-                GIF
+    <>
+    <Collection/>
+      <div className="pb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+        {results.map((item, index) => (
+          <motion.div 
+            key={`${item.type}-${item.id}`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.3 }}
+            className="relative group overflow-hidden rounded-xl shadow-md bg-gray-100 aspect-[4/3]"
+          >
+            {/* Overlay Title */}
+            {item.title && item.title !== 'Untitled' && item.title !== 'Video' && (
+              <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/70 via-black/20 to-transparent p-3 pt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <p className="text-white text-sm font-medium truncate leading-tight">
+                  {item.title}
+                </p>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Meta Info */}
-          {(item.author || item.user) && (
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
-              <p className="text-white/90 text-xs truncate">
-                {item.type === 'video' 
-                  ? 'Pexels' 
-                  : item.type === 'gif' 
-                    ? item.user 
-                    : `Unsplash · ${item.author}`}
-              </p>
-            </div>
-          )}
-        </motion.div>
-      ))}
+            {/* PHOTO */}
+            {item.type === "photo" && (
+              <div className="w-full h-full">
+                <img 
+                  src={item.src} 
+                  alt={item.title || 'Photo'} 
+                  loading="lazy"
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                  style={{ backgroundColor: item.color }}
+                />
+              </div>
+            )}
+
+            {/* VIDEO */}
+            {item.type === "video" && (
+              <div className="relative w-full h-full bg-black flex items-center justify-center">
+                {item.src ? (
+                  <video 
+                    src={item.src} 
+                    poster={item.thumbnail}
+                    controls 
+                    preload="metadata"
+                    className="w-full h-full object-contain"
+                  />
+                  
+                ) : (
+                  <div className="text-white text-xs text-center p-4">Video unavailable</div>
+                )}
+                
+                {item.duration > 0 && (
+                  <span className="absolute bottom-2 right-2 bg-black/80 text-white text-xs font-bold px-2 py-1 rounded z-10 pointer-events-none">
+                    {Math.round(item.duration)}s
+                  </span>
+                )}
+                
+                {item.src && (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                    <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                      <svg className="w-6 h-6 text-white fill-current" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* GIF */}
+            {item.type === "gif" && (
+              <div className="w-full h-full bg-gray-900 flex items-center justify-center relative">
+                <img 
+                  src={item.src} 
+                  alt={item.title || 'GIF'} 
+                  loading="lazy"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute bottom-2 left-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider font-bold pointer-events-none">
+                  GIF
+                </div>
+                
+              </div>
+            )}
+
+            {/* Meta Info */}
+            {(item.author || item.user) && (
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20 flex items-center justify-center">
+                <div className="flex-1 min-w-0 pr-2">
+                  <p className="text-white/90 text-xs truncate">
+                    {item.type === 'video' 
+                      ? 'Pexels' 
+                      : item.type === 'gif' 
+                        ? item.user 
+                        : `Unsplash · ${item.author}`}
+                  </p>
+                </div>
+                <button 
+                  onClick={(e) => handleDownload(e, item.src, item.type, item.id)}
+                  className="bg-white/20 hover:bg-white/40 text-white p-1.5 rounded-full backdrop-blur-sm transition-colors flex-shrink-0"
+                  title="Download"
+                >
+                  <Download size={16} />
+                </button>
+                <button onClick={()=> dispatch(addToCollection(item))}  className="bg-white/20 hover:bg-white/40 text-white p-1.5 rounded-full backdrop-blur-sm transition-colors flex-shrink-0 ml-2 py-2" >add to collection</button>
+              </div>
+            )}
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Load More Button */}
+      {results.length > 0 && (
+        <div className="flex justify-center mt-8">
+          <button 
+            onClick={() => dispatch(incrementPage())}
+            disabled={loading}
+            className="bg-white border text-slate-900 px-8 py-3 rounded-full font-bold shadow-sm hover:shadow-md hover:bg-amber-50 active:scale-95 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <>
+                <Loader2 size={18} className="animate-spin text-amber-500" />
+                Loading...
+              </>
+            ) : (
+              <>
+                Load More <Plus size={18} className="text-amber-500" />
+              </>
+            )}
+          </button>
+        </div>
+      )}
     </div>
+    </>
   );
 };
 
