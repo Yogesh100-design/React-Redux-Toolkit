@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setQuery } from "../redux/features/SearchSlice";
+import { setQuery, setLoading } from "../redux/features/SearchSlice";
 
 const SearchBar = () => {
   const [search, setSearch] = useState("");
@@ -9,7 +9,8 @@ const SearchBar = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault(); // stop page reload
-    dispatch(setQuery(search))
+    dispatch(setLoading(true));
+    dispatch(setQuery(search));
     setSearch('');
   };
 

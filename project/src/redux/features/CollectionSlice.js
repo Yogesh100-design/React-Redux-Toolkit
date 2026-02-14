@@ -7,11 +7,10 @@ export const CollectionSlice = createSlice({
   },
   reducers: {
     addToCollection: (state, action) => {
-      // const exist = state.item.find((item) => item.id === item.paylaod.id);
-
-      // if (!exist) {
+      const exist = state.item.find((item) => item.id === action.payload.id);
+      if (!exist) {
         state.item.push(action.payload);
-      // }
+      }
     },
     removeFromCollection: (state, action) => {
       state.item = state.item.filter((item) => item.id !== action.payload);

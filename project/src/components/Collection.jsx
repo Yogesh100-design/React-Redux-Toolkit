@@ -46,19 +46,36 @@ const Collection = () => {
 
         <motion.button
           initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
+          animate={{ 
+            scale: 1,
+            backgroundColor: collection.length > 0 ? "#fbbf24" : "#0f172a", // amber-400 vs slate-900
+            color: collection.length > 0 ? "#000000" : "#fbbf24", // black vs amber-400
+            boxShadow: collection.length > 0 ? "0px 10px 30px -5px rgba(251, 191, 36, 0.6)" : "0px 10px 30px -5px rgba(30, 27, 75, 0.5)"
+          }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setOpen(!open)}
-          className="pointer-events-auto bg-slate-900 text-amber-400 p-4 rounded-full shadow-2xl shadow-indigo-900/20 border-4 border-white ring-4 ring-amber-100 flex items-center justify-center group overflow-hidden relative"
+          className={`pointer-events-auto w-16 h-16 rounded-full border-4 flex items-center justify-center group overflow-hidden relative transition-all duration-500 ${
+            collection.length > 0 ? 'border-slate-900 ring-4 ring-amber-200/50' : 'border-white ring-4 ring-slate-100'
+          }`}
         >
-          <div className="absolute inset-0 bg-amber-400/20 rounded-full scale-0 group-hover:scale-150 transition-transform duration-500" />
-          <Archive size={24} strokeWidth={2.5} className="relative z-10" />
+          {/* Internal Pulse Effect for Active State */}
           {collection.length > 0 && (
-            <span className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white text-[10px] font-black flex items-center justify-center rounded-full border-2 border-white animate-bounce z-20">
-              {collection.length}
-            </span>
+             <div className="absolute inset-0 bg-white/30 rounded-full animate-ping opacity-20" />
           )}
+
+          <div className="absolute inset-0 bg-white/10 rounded-full scale-0 group-hover:scale-150 transition-transform duration-500" />
+          
+          <div className="relative z-10 flex flex-col items-center justify-center leading-none">
+            {collection.length > 0 ? (
+              <>
+                <span className="text-xl font-black">{collection.length}</span>
+                <span className="text-[8px] font-bold uppercase tracking-wider opacity-60">Items</span>
+              </>
+            ) : (
+              <Archive size={26} strokeWidth={2.5} />
+            )}
+          </div>
         </motion.button>
       </div>
 

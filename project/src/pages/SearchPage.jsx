@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Play, ArrowLeft } from 'lucide-react';
+import { Play, ArrowLeft, Plus } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import SearchBar from '../components/SearchBar';
@@ -13,10 +13,26 @@ const SearchPage = () => {
     return (
         <div className="min-h-screen bg-[#fdfdf7] text-slate-900 font-sans selection:bg-amber-200">
             <Helmet>
-                <title>Search | Vault Visual Engine</title>
-                <meta name="description" content="Search for high-resolution photos, 4K videos, and GIFs. Filter by type and find the perfect asset for your project." />
-                <meta property="og:title" content="Search | Vault Visual Engine" />
-                <meta property="og:description" content="Search for high-resolution photos, 4K videos, and GIFs." />
+                <title>Search Free Stock Photos, 4K Videos & GIFs | Vault</title>
+                <meta name="description" content="Search and download free aesthetic images, business photos, and motivational video clips. No copyright media for Instagram, YouTube, and websites." />
+                <meta name="keywords" content="free stock photos, 4k videos, gif search, royalty free images, aesthetic wallpapers, youtube background videos" />
+                <meta property="og:title" content="Search Free Stock Photos & 4K Videos | Vault" />
+                <meta property="og:description" content="Find the perfect free asset for your creative projects. High quality, royalty free, and instant download." />
+                <script type="application/ld+json">
+                  {`
+                    {
+                      "@context": "https://schema.org",
+                      "@type": "SearchResultsPage",
+                      "name": "Vault Search Results",
+                      "description": "Search results for free high-resolution images, videos, and GIFs.",
+                      "potentialAction": {
+                        "@type": "SearchAction",
+                        "target": "https://vault-visual-engine.vercel.app/search?q={search_term_string}",
+                        "query-input": "required name=search_term_string"
+                      }
+                    }
+                  `}
+                </script>
             </Helmet>
 
             {/* Header */}
@@ -56,6 +72,10 @@ const SearchPage = () => {
                     <div className="w-full max-w-2xl">
                         <Tabs />
                     </div>
+                    
+                    <p className="text-slate-400 text-xs md:text-sm text-center max-w-lg mx-auto font-medium bg-amber-50/50 p-3 rounded-lg border border-amber-100/50 flex flex-wrap items-center justify-center gap-1">
+                        <span className="font-bold text-amber-600">Tip:</span> Add assets by clicking the <span className="inline-flex items-center justify-center bg-black text-white w-5 h-5 rounded-full shadow-sm"><Plus size={12} strokeWidth={3} /></span> sign. Access them in your <span className="font-bold text-slate-800">Vault</span> (bottom right) to compare & download.
+                    </p>
                 </motion.div>
 
                 <motion.div

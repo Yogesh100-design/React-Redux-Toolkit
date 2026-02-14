@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveTab } from "../redux/features/SearchSlice";
+import { setActiveTab, setLoading } from "../redux/features/SearchSlice";
 
 const Tabs = () => {
   const tabs = ["Photos", "Videos", "GIF"];
@@ -26,7 +26,10 @@ const Tabs = () => {
           return (
             <button
               key={tab}
-              onClick={() => dispatch(setActiveTab(tab))}
+              onClick={() => {
+                dispatch(setLoading(true));
+                dispatch(setActiveTab(tab));
+              }}
               className={`
                 relative px-8 py-2.5 text-[10px] uppercase tracking-[0.2em] font-black rounded-xl 
                 transition-all duration-500 ease-out overflow-hidden cursor-pointer

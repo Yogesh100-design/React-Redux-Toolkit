@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://your-domain.com/sitemap.xml
+Sitemap: https://vault-visual-engine.vercel.app/sitemap.xml

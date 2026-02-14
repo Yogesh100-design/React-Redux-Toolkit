@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import devImage from "../assets/edu.webp";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -32,12 +33,29 @@ const LandingPage = () => {
   return (
     <div className="bg-[#fdfdf7] text-slate-900 selection:bg-amber-200">
       <Helmet>
-        <title>Vault | The Visual Web Search Engine</title>
-        <meta name="description" content="Discover millions of high-quality photos, videos, and GIFs. The ultimate creative resource for designers and developers." />
-        <meta property="og:title" content="Vault | The Visual Web Search Engine" />
-        <meta property="og:description" content="Search high-res photos, 4K videos, and trending GIFs from the world's best libraries." />
+        <title>Free HD Images, 4K Stock Videos & GIFs Download | Vault Visual Search</title>
+        <meta name="description" content="Download free HD images, aesthetic backgrounds, and royalty free stock videos. Search 4K video clips for YouTube, funny GIFs, and developer wallpapers. High quality and copyright free media for creators." />
+        <meta name="keywords" content="free hd images, royalty free stock videos, 4K background videos, funny gifs, aesthetic photos, developer wallpapers, copyright free media, instagram reels background" />
+        <meta property="og:title" content="Free HD Images & 4K Videos | Vault Visual Search" />
+        <meta property="og:description" content="Download high-quality royalty free images, 4K videos, and trending GIFs. Perfect for creators, developers, and startups." />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1000&auto=format&fit=crop" />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Vault Visual Search",
+              "url": "https://vault-visual-engine.vercel.app/",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://vault-visual-engine.vercel.app/search?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              },
+              "description": "The ultimate resource for free HD images, 4K stock videos, and GIFs."
+            }
+          `}
+        </script>
       </Helmet>
 
       {/* --- NAVBAR --- */}
@@ -75,8 +93,8 @@ const LandingPage = () => {
             <Sparkles size={14} /> NEW: TRIPLE-SOURCE ENGINE
           </motion.div>
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 mb-6 md:mb-8 tracking-tighter leading-[0.9]">
-            SEARCH THE <br />
-            <span className="text-amber-500 italic">VISUAL WEB.</span>
+            FREE HD IMAGES & <br />
+            <span className="text-amber-500 italic">4K STOCK VIDEOS.</span>
           </h1>
           <p className="text-lg md:text-xl text-slate-500 mb-8 md:mb-12 max-w-2xl mx-auto font-medium leading-relaxed px-4">
             The ultimate creative resource. Instantly search high-res photos, 4K videos, and trending GIFs from the world's best libraries.
@@ -95,6 +113,35 @@ const LandingPage = () => {
               Explore Media
             </button>
           </div>
+
+        </div>
+        
+        {/* SEO Keywords / Trending Searches */}
+        <div className="container mx-auto mt-16 text-center">
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Trending Searches</p>
+            <div className="flex flex-wrap justify-center gap-3 px-4 max-w-5xl mx-auto">
+                {[
+                    "Aesthetic Wallpapers", "Business Meetings", "Coding Setup", "Nature 4K", 
+                    "Funny Reaction GIFs", "Startup Office", "Abstract Art", "Minimalist Backgrounds",
+                    "Festival Celebrations", "Rainy Day Vibes", "Coffee Break", "Fitness Motivation"
+                ].map((term) => (
+                    <button 
+                        key={term}
+                        onClick={() => {
+                            // In a real app, this would navigate with query param
+                            // navigate(`/search?q=${encodeURIComponent(term)}`)
+                            // For now, simple navigation to search
+                            navigate('/search');
+                        }}
+                        className="px-4 py-2 bg-white border border-slate-200 hover:border-amber-400 hover:text-amber-600 rounded-full text-xs font-bold text-slate-600 transition-colors shadow-sm"
+                    >
+                        {term}
+                    </button>
+                ))}
+            </div>
+            <div className="mt-8 text-slate-400 text-[10px] md:text-xs font-medium max-w-3xl mx-auto leading-relaxed px-4">
+                Popular: <span className="hover:text-slate-600 transition-colors cursor-pointer">Free HD Images Download</span> • <span className="hover:text-slate-600 transition-colors cursor-pointer">Royalty Free Stock Videos</span> • <span className="hover:text-slate-600 transition-colors cursor-pointer">Funny GIFs</span> • <span className="hover:text-slate-600 transition-colors cursor-pointer">Developer Wallpapers</span> • <span className="hover:text-slate-600 transition-colors cursor-pointer">Startup Presentation Backgrounds</span>
+            </div>
         </div>
       </section>
 
@@ -218,24 +265,75 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* --- DEVELOPER SHOWCASE --- */}
+      <section className="py-20 md:py-32 bg-white relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-amber-200 to-transparent"></div>
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="max-w-4xl mx-auto bg-slate-50 border border-slate-100 rounded-[3rem] p-8 md:p-12 shadow-2xl flex flex-col md:flex-row items-center gap-10 md:gap-16">
+             {/* Profile Image with Ring */}
+             <div className="relative group shrink-0">
+                <div className="absolute inset-0 bg-amber-400 rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                <div className="relatve w-40 h-40 md:w-56 md:h-56 rounded-full p-2 bg-white border-2 border-amber-100 shadow-xl overflow-hidden">
+                  <img src={devImage} alt="Yogesh Chavan" className="w-full h-full object-cover rounded-full grayscale group-hover:grayscale-0 transition-all duration-500" />
+                </div>
+                <div className="absolute bottom-2 right-4 bg-white text-amber-600 p-2 rounded-full shadow-lg border border-amber-50">
+                  <Code2 size={20} />
+                </div>
+             </div>
+
+             {/* Content */}
+             <div className="text-center md:text-left">
+                <div className="inline-block px-4 py-1.5 rounded-full bg-amber-100/50 text-amber-700 text-[10px] font-black uppercase tracking-widest mb-6">
+                  Meet the Developer
+                </div>
+                <h3 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tighter">
+                  Crafting Digital <br/>
+                  <span className="text-amber-500 italic">Experiences.</span>
+                </h3>
+                <p className="text-slate-600 text-lg mb-8 leading-relaxed font-medium">
+                  Hi, I'm <span className="text-slate-900 font-bold">Yogesh Chavan</span>. I build high-performance web applications with a focus on stunning visuals and seamless user interactions. Vault is a testament to my passion for modern frontend engineering.
+                </p>
+                <a 
+                  href="https://yogeshchavan.in" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-3 bg-slate-900 text-white px-8 py-4 rounded-full font-bold hover:bg-amber-400 hover:text-black transition-all group"
+                >
+                  Visit My Portfolio <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </a>
+             </div>
+          </div>
+        </div>
+      </section>
+
       {/* --- TESTIMONIALS --- */}
       <section className="py-16 md:py-32">
         <div className="container mx-auto px-6">
           <h2 className="text-center text-3xl md:text-4xl font-black text-slate-900 mb-12 md:mb-20 tracking-tighter uppercase italic">Words from the vault</h2>
-          <div className="grid md:grid-cols-3 gap-6 md:gap-10">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="p-6 md:p-10 bg-white border border-slate-100 rounded-3xl md:rounded-[2.5rem] shadow-sm relative">
-                <Star className="text-amber-400 mb-6" size={24} fill="currentColor" />
-                <p className="text-slate-600 mb-6 md:mb-8 font-medium italic leading-relaxed text-sm md:text-base">"The best tool for finding inspiration. I use it every day to gather assets for my client projects."</p>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-amber-100 flex items-center justify-center font-bold text-amber-700 italic text-xl">Y</div>
-                  <div>
-                    <p className="text-xs md:text-sm font-black text-slate-900 uppercase tracking-tighter">Yogesh Kumar</p>
-                    <p className="text-[10px] md:text-xs text-amber-600 font-bold uppercase tracking-widest">Creative Director</p>
-                  </div>
-                </div>
+          <div className="max-w-4xl mx-auto">
+            <div className="p-8 md:p-14 bg-white border border-slate-100 rounded-[2.5rem] shadow-xl relative text-center">
+              <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-amber-400 p-4 rounded-full shadow-lg border-4 border-white">
+                 <Star size={32} fill="currentColor" className="text-black" />
               </div>
-            ))}
+              
+              <div className="mt-8 mb-8 relative">
+                <span className="text-6xl text-amber-100 absolute -top-8 left-0 select-none font-serif">"</span>
+                <p className="text-xl md:text-3xl font-medium text-slate-800 italic leading-relaxed relative z-10 px-4 md:px-12">
+                   This platform redesign represents the next generation of visual search. By unifying multiple APIs into a single, seamless interface, Vault empowers creators to find the perfect asset in seconds, not hours.
+                </p>
+                <span className="text-6xl text-amber-100 absolute -bottom-16 right-0 select-none font-serif">"</span>
+              </div>
+
+              <div className="flex flex-col items-center justify-center gap-3">
+                 <div className="w-16 h-16 rounded-full p-1 bg-gradient-to-tr from-amber-400 to-amber-100">
+                    <img src={devImage} alt="Yogesh Chavan" className="w-full h-full object-cover rounded-full border-2 border-white" />
+                 </div>
+                 <div>
+                    <h4 className="text-lg font-black text-slate-900 uppercase tracking-tighter">Yogesh Chavan</h4>
+                    <p className="text-xs text-amber-600 font-bold uppercase tracking-widest">Full Stack Developer & Creator</p>
+                 </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -245,9 +343,9 @@ const LandingPage = () => {
         <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
           <span className="text-xl font-black tracking-tighter">VAULT<span className="text-amber-500">.</span></span>
           <div className="flex gap-10 mt-6 md:mt-0 text-xs font-bold uppercase tracking-widest text-slate-400">
-            <a href="#" className="hover:text-amber-600 transition">Twitter</a>
-            <a href="#" className="hover:text-amber-600 transition">GitHub</a>
-            <a href="#" className="hover:text-amber-600 transition">LinkedIn</a>
+            <a href="https://yogeshchavan.in/" target="_blank" rel="noreferrer" className="hover:text-amber-600 transition">Portfolio</a>
+            <a href="https://github.com/YOGESH-D-CHAVAN" target="_blank" rel="noreferrer" className="hover:text-amber-600 transition">GitHub</a>
+            <a href="https://www.linkedin.com/in/yogesh-chavan-494196316/" target="_blank" rel="noreferrer" className="hover:text-amber-600 transition">LinkedIn</a>
           </div>
           <p className="mt-6 md:mt-0 text-xs font-medium text-slate-400">© 2026 VAULT INC. CRAFTED BY YOGESH</p>
         </div>
